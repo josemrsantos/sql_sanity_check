@@ -5,18 +5,19 @@ from textwrap import dedent
 class TestDefaultOutput:
     def test_log(self, capsys):
         default_output = DefaultOutput()
-        default_output.log('test1')
+        default_output.log('test_name', 'test_result', 'code')
         captured = capsys.readouterr()
-        assert captured.out == "test1\n"
+        assert '+++++++++++++++++++++++++++++++++++++++++++++++++++' in captured.out
+        assert 'Test: test_name' in captured.out
+        assert 'code' in captured.out
+        assert 'Has returned: test_result' in captured.out
+        assert '********************** ERROR *****************************' not in captured.out
 
     def test_error(self, capsys):
         default_output = DefaultOutput()
-        default_output.error('test1', 'file1')
+        default_output.error('test_name', 'test_result', 'code')
         captured = capsys.readouterr()
-        expected = dedent(f""" 
-        ********************** ERROR ****************************\n
-        * IN file1\n
-        test1\n
-        *********************************************************\n
-        """)
-        assert captured.err == expected
+        assert 'ERROR' in captured.err
+        assert 'Test: test_name' in captured.err
+        assert 'code' in captured.err
+        assert 'Has returned: test_result' in captured.err
