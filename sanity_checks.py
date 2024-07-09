@@ -6,20 +6,31 @@ import sys
 class DefaultOutput:
     """ Default output class: It simply prints the string.
     """
-    @staticmethod
-    def log(value, identifier=None):
-        print(value)
 
     @staticmethod
-    def error(value, identifier=None):
-        if identifier is None:
-            identifier = 'Identifier not provided'
-        output_error_text = dedent(f""" 
-        ********************** ERROR ****************************\n
-        * IN {identifier}\n
-        {value}\n
-        *********************************************************\n
-        """)
+    def log(test_name, test_result=None, code=None):
+        if test_result is None:
+            reason = f'Running {test_name}'
+        else:
+            reason = f"""
++++++++++++++++++++++++++++++++++++++++++++++++++++
+Test: {test_name}
+{code}
+Has returned: {test_result} 
++++++++++++++++++++++++++++++++++++++++++++++++++++"""
+        print(reason)
+
+    @staticmethod
+    def error(test_name, test_result, code):
+        output_error_text = f"""
+********************** ERROR ****************************
+---------------
+Test: {test_name}
+{code}
+Has returned: {test_result} 
+---------------
+*********************************************************
+        """
         sys.stderr.write(f"{output_error_text}")
 
 
@@ -49,16 +60,17 @@ class SanityCheck:
         self.tests_path = tests_path
         test_name = None
         test_result = None
-        self.reason = dedent(
-            f"""
-        ---------------
-        Test: {test_name}
-        has returned: {test_result} 
-        ---------------"""
-        )
         self.data = []
         self.sql_files = []
         self.run()
+
+    def log(self, test_name, test_result=None, code=None):
+        for output_object in self.output_objects:
+            output_object.log(test_name, test_result, code)
+
+    def error(self, test_name, test_result, code):
+        for output_object in self.output_objects:
+            output_object.error(test_name, test_result,  code)
 
     def get_sql_files(self):
         for filename in os.listdir(self.tests_path):
@@ -70,8 +82,8 @@ class SanityCheck:
     def execute_sql(self):
         with self.connector as conn:
             for item in self.data:
-                filename = item['filename']
                 sql_code = item['sql_code']
+                self.log(item['filename'])
                 result = conn.execute_query(sql_code)
                 if result:
                     item['result'] = result
@@ -81,11 +93,9 @@ class SanityCheck:
         for item in self.data:
             if item['result'] is not None:
                 error_found = True
-                for output_object in self.output_objects:
-                    output_object.error(item['result'], item['filename'])
+                self.error(item['filename'], item['result'], item['sql_code'])
             else:
-                for output_object in self.output_objects:
-                    output_object.log(f"Test {item['filename']} passed")
+                self.log(item['filename'], 'No error found', item['sql_code'])
         if error_found:
             raise Exception("Error found in SQL tests")
 
