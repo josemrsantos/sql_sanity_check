@@ -72,13 +72,13 @@ This is very specific and it is more related with good writting good SQL. Severa
 
 An example:
 
-**ServerA** has 2 tables: **table_a_1** and **table_a_2**. **ServerB** has only 1 table: **table_b_1**, but it also has a FDW connection to ServerA, so it also "allows queries" on those tables. [Mental note: We should have a picture for this example].
+**ServerA** has 2 tables: **table_a_1** and **table_a_2**. **ServerB** has only 1 table: **table_b_1**, but it also has a FDW connection to ServerA, so it also "allows queries" on those tables.
 
-If we do a SELECT on **ServerB** such as `SELECT name FROM table_a_1 LIMIT 10`, that query will run on **ServerA** and return the result (using the network) to **serverB**. This is not a problem, because it is all running on the same server (in this case **ServerA**) and the volume of data going throught the network is not very large. This is just a simple example, but Redshift also has some similar capabilities as well as other capabilities, where this is not an issue (please check the DB server that you might be using if this might be a problem).
+If we do a SELECT on **ServerB** such as `SELECT name FROM table_a_1 LIMIT 10`, that query will run on **ServerA** and return the result (using the network) to **serverB**. This is not a problem, because it is all running on the same server (in this case **ServerA**) and the volume of data going throught the network is not very large. This is just a simple example, but Redshift also has some similar capabilities as well as other capabilities, where this is not an issue. If you use any sort of "data sharing", please check the DB server that you are using. if this might something you need to consider.
 
 When we have a case where we make a query to ServerB that might send a part or all the query to ServerA, the general advice would be to keep it as seperate as possible and minimise possible network usage.
 
-A good example of keeping to these rules, has already geen given before. Lets say that we have **Track** and **InvoiceLine** on different servers. Using CTEs and fetching a low number of rows/data is a good way to create a SQL test (please see the previous code example).
+A good example of keeping to these rules, has already been given before. Lets say that we have **Track** and **InvoiceLine** on different servers. Using CTEs and fetching a low number of rows/data is a good way to create a SQL test (please see the previous code example).
 
 ## Usage and contributions
 
