@@ -3,9 +3,9 @@ import connector_sqlite
 
 
 # This is just a demo usage example for a table in a SQLite database
-# This is the default DB that comes with SQLite, but I have changed a value to demo
-# the functionality of the SanityCheck class
-def main():  # This still has a bug. Will fix later.
+# This is the default DB that comes with SQLite, but I have changed a value in the table InvoiceLine
+# to demo the functionality of the SanityCheck class
+def main():
     db_path = "./demo/Chinook.db"  # Adjust the path as necessary
     tests_path = "./sql_tests/"  # Adjust the path as necessary
     # Instantiate the SQLite connector
