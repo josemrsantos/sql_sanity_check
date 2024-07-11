@@ -1,5 +1,4 @@
-from sanity_checks import DefaultOutput
-from textwrap import dedent
+from output_default import DefaultOutput
 
 
 class TestDefaultOutput:
