@@ -42,19 +42,34 @@ with self.connector as conn:
     result = conn.execute_query(sql_code)
 ```
 
-The following methods should be implemented to the class:
+The following methods should be implemented to the class:  
+**connect**: Method that creates a connection to the DB  
+**execute_query**: Method that send a SQL command to the server and returns the result as an iterator  
+**close**: Method that closes a connection to the DB  
+`__enter__` and `__exit__`: So that the class is a content manager.  
 
-* **connect**: Method that creates a connection to the DB
-* **execute_query**: Method that send a SQL command to the server and returns the result as an iterator
-* **close**: Method that closes a connection to the DB
-* `__enter__` and `__exit__`: So that the class is a content manager.
+Looking at the module connector_sqlite.py might also help.
 
-  Looking at the module connector_sqlite.py might also help.
-* ## SQL tests code examples
+Specific connectors can be created and passed to the creation of the SQLSanityCheck object. 
+The default connector is the SQLite connector and there can be only one connector (queries are only done in one server).
 
+
+### Anatomy of an output
+
+An output class should define where the output of either a log or an error should go. 
+The default output is the StdOutErrOutput class that outputs to stdout and stderr. 
+The class should have the following methods:  
+**log**: Method that logs a message, based on the input parameters   
+**error**: Method that logos an error message, based on the input parameters.  
+Both methods should have the input parameters: **test_name**, **test_result** and **code**. 
+They should based on those parameters be able to create a valid message.  
+The creation of an object with SanityCheck accepts in the output_objects parameter a list of output objects.
+This means that the output can be sent to multiple places.
+
+## SQL tests code examples
 ### Simple tests
-
-A few simple tests have already been included in the sql_tests directory and these work around chacking different values on different tables. Counting the number of lines might also be a simple and effective test. eg:
+A few simple tests have already been included in the sql_tests directory and these work around checking different 
+values on different tables. Counting the number of lines might also be a simple and effective test. eg:
 
 ```sql
 WITH table_track AS (SELECT count(*) AS count_t FROM Track),
@@ -63,25 +78,40 @@ SELECT count_t, count_il
 FROM table_track, table_invoiceline
 WHERE count_t < count_il;
 ```
-
-The previous test only checks if we don't have more distinct TrackIds on the table **InvoiceLine** than the number of actual Tracks in tha table **Track**.
+The previous test only checks if we don't have more distinct TrackIds on the table **InvoiceLine** than the number of 
+actual Tracks in tha table **Track**.
 
 ### Tests on foreign data
 
-This is very specific and it is more related with good writting good SQL. Several DB servers are offering some sort of "foreign data access". A few examples are the FDW on PostgreSQL that allows one PostgreSQL server to have access to tables that are on a different server. The main caveat of this, is that any query that is done on the server that only has the "foreign table" that itself is in a second server, the actual query will be done on the "second server".
+This is very specific and it is more related with good writing good SQL. Several DB servers are offering some sort of 
+"foreign data access". A few examples are the FDW on PostgreSQL that allows one PostgreSQL server to have access to 
+tables that are on a different server. The main caveat of this, is that any query that is done on the server that only 
+has the "foreign table" that itself is in a second server, the actual query will be done on the "second server".
 
-An example:
+#### An example:
 
-**ServerA** has 2 tables: **table_a_1** and **table_a_2**. **ServerB** has only 1 table: **table_b_1**, but it also has a FDW connection to ServerA, so it also "allows queries" on those tables.
+**ServerA** has 2 tables: **table_a_1** and **table_a_2**. **ServerB** has only 1 table: **table_b_1**, but it also has 
+a FDW connection to ServerA, so it also "allows queries" on those tables.
 
-If we do a SELECT on **ServerB** such as `SELECT name FROM table_a_1 LIMIT 10`, that query will run on **ServerA** and return the result (using the network) to **serverB**. This is not a problem, because it is all running on the same server (in this case **ServerA**) and the volume of data going throught the network is not very large. This is just a simple example, but Redshift also has some similar capabilities as well as other capabilities, where this is not an issue. If you use any sort of "data sharing", please check the DB server that you are using. if this might something you need to consider.
+If we do a SELECT on **ServerB** such as `SELECT name FROM table_a_1 LIMIT 10`, that query will run on **ServerA** and 
+return the result (using the network) to **serverB**. This is not a problem, because it is all running on the same 
+server (in this case **ServerA**) and the volume of data going through the network is not very large. This is just a 
+simple example, but Redshift also has some similar capabilities as well as other capabilities, where this is not an 
+issue. If you use any sort of "data sharing", please check the DB server that you are using. if this might something 
+you need to consider.
 
-When we have a case where we make a query to ServerB that might send a part or all the query to ServerA, the general advice would be to keep it as seperate as possible and minimise possible network usage.
+When we have a case where we make a query to ServerB that might send a part or all the query to ServerA, the general 
+advice would be to keep it as separate as possible and minimise possible network usage (e.g. using CTEs).
 
-A good example of keeping to these rules, has already been given before. Lets say that we have **Track** and **InvoiceLine** on different servers. Using CTEs and fetching a low number of rows/data is a good way to create a SQL test (please see the previous code example).
+A good example of keeping to these rules, has already been given before. Lets say that we have **Track** and 
+**InvoiceLine** on different servers. Using CTEs and fetching a low number of rows/data is a good way to create a SQL 
+test (please see the previous code example).
 
 ## Usage and contributions
 
-The code (as simple as it is), is released under the MIT license, that AFAIK is one of the most (if not the most) permissive license. So, please use it as you wish and get in touch if you need anything, but don't blame me if something goes wrong.
+The code (as simple as it is), is released under the MIT license, that AFAIK is one of the most (if not the most) 
+permissive license. So, please use it as you wish and get in touch if you need anything, but don't blame me if 
+something goes wrong.
 
-In terms of contributions, I would be very happy to accept anything you can contribute with. From small fixes to this Readme to adding other connectors that could help others.
+In terms of contributions, I would be very happy to accept anything you can contribute with. From small fixes to this 
+Readme to adding other connectors and output classes that could help others.
