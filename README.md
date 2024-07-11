@@ -6,6 +6,28 @@ Created by Jose Santos
 [josemrsantos@gmail.com](mailto:josemrsantos@gmail.com)
 [https://www.linkedin.com/in/josemrsantos/](https://www.linkedin.com/in/josemrsantos/)
 
+## How to install it
+
+The library is already available on PyPi, so you can install it with pip: `pip install sql_sanity_check`  
+Another option is to clone the repository and install it with pip: `pip install .`  
+Finally, this code does have a MIT license, so cloning it to an internal repository is also a valid option. There new 
+classes can be added and the code can be modified to suit your needs.
+
+## How to run it
+For now, the package comes with a demo script called sq_sanity_check_demo.py. This script will run a few tests on the
+Chinook.db database that is included in the demo directory. The script will run a few tests and output the results to
+stdout. The script can be run with the following command: `python sql_sanity_check_demo.py`.
+Please crease a similar script to run your own tests. This could be as simple as:
+```python
+import sanity_checks
+import connector_sqlite # or any other connector
+# import custom_output # or use the default output class
+db_path = "./demo/Chinook.db"  # Adjust the path as necessary
+tests_path = "./sql_tests/"  # Adjust the path as necessary
+db_connector = connector_sqlite.SQLiteDB(db_path)
+sanity_checks.SanityCheck(tests_path=tests_path, connector=db_connector)
+```
+
 ## How it works
 
 It could not be more simple: Create SQL code that returns rows if you want the test to fail.
