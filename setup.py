@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='sql_sanity_checks',
-    version='0.0.1',
+    version='0.1.0',
     author='Jose Santos',
     author_email='josemrsantos@gmail.com',
     description='A Python Library to help perform tests on SQL engines to assess the quality of the data',

@@ -9,13 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Nothing yet
+
+### Changed
+
+- Nothing yet
+
+### Fixed
+
+- Nothing yet
+
+## [0.1.0] - 2024-07-11
+
+### Added
+
+- This Changelog file
+- Deployment instructions
+
 ### Changed
 
 - Refactored the main module sanity_checks to have the default output class, in a different file.
-- Added this Changelog file
 - Improved documentation
-
-### Fixed
 
 
 ## [0.0.1] - 2024-07-10
