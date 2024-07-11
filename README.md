@@ -2,9 +2,17 @@
 
 A Python Library to help perform tests on SQL engines to assess the quality of the data.
 
-Created by Jose Santos
-[josemrsantos@gmail.com](mailto:josemrsantos@gmail.com)
+Created by Jose Santos  
+[josemrsantos@gmail.com](mailto:josemrsantos@gmail.com)  
 [https://www.linkedin.com/in/josemrsantos/](https://www.linkedin.com/in/josemrsantos/)
+
+## Why ?
+Because sometimes we need to make sure that the data we have is correct. This is especially true when we have a lot of
+data, and we are not sure if the data is correct. This library is a simple way to create tests that can be run on a SQL
+engine to make sure that the data is correct.  
+
+Also very useful for when you have an orchestrator (e.g. airflow) and want to automate some SQL tests that you might 
+already have.
 
 ## How to install it
 
