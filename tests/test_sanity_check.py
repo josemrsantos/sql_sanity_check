@@ -23,7 +23,7 @@ def test_check_results_no_errors(mock_run, mock_error, mock_log, mock_connector,
     # Simulate SQL execution with no errors
     sanity_check_instance.data = [{'filename': 'test1.sql', 'sql_code': 'SELECT * FROM table;', 'result': None}]
     sanity_check_instance.check_results()
-    mock_log.assert_called_once_with('test1.sql', 'No error found', 'SELECT * FROM table;')
+    mock_log.assert_called_once_with('test1.sql', [], 'SELECT * FROM table;')
     mock_error.assert_not_called()
 
 

@@ -63,7 +63,7 @@ class SanityCheck:
                 error_found = True
                 self.error(item['filename'], item['result'], item['sql_code'])
             else:
-                self.log(item['filename'], 'No error found', item['sql_code'])
+                self.log(item['filename'], [], item['sql_code'])
         if error_found:
             raise Exception("Error found in SQL tests")
 

@@ -93,6 +93,8 @@ The class should have the following methods:
 **error**: Method that logos an error message, based on the input parameters.  
 Both methods should have the input parameters: **test_name**, **test_result** and **code**. 
 They should based on those parameters be able to create a valid message.  
+**IMPORTANT:** **test_result** will be [] if no rows are returned by the SQL query and will be None if the library is
+only sending the message that the test **test_name**.  
 The creation of an object with SanityCheck accepts in the output_objects parameter a list of output objects.
 This means that the output can be sent to multiple places.
 
