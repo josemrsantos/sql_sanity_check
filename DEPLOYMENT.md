@@ -5,7 +5,7 @@ guide on how to deploy the SQLSanityCheck package both in github and in PyPi.
 ## How to create a new version of the package in github
 1. Make sure you have the latest version of the code in your local repository.
 2. Make sure you have the latest version of the code in the remote repository.
-3. Make sure that the new version number is in the setup.py and in the __init__.py files.
+3. Make sure that the new version number is in the setup.py and in the __version__.py files.
 4. Update the CHANGELOG.md file with the new version number and the changes that were made.
 5. Commit the changes to the remote repository.
 6. Tag the new version with the following command: `git tag -a v0.1.0 -m "Version 0.1.0"`.
