@@ -1,7 +1,7 @@
 import sqlite3
 
 
-class SQLiteDB:
+class SQLiteDBConnector:
     def __init__(self, db_path=':memory:'):
         self.db_path = db_path
         self.connection = None

@@ -1,10 +1,10 @@
 import pytest
-from connector_sqlite import SQLiteDB
+from connector_sqlite import SQLiteDBConnector
 
 
 @pytest.fixture
 def db():
-    with SQLiteDB(':memory:') as db:
+    with SQLiteDBConnector(':memory:') as db:
         db.execute_query("CREATE TABLE test (id INTEGER PRIMARY KEY, name TEXT)")
         yield db
 
