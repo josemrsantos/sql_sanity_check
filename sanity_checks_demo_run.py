@@ -12,7 +12,7 @@ def main():
     db_path = "./demo/Chinook.db"  # Adjust the path as necessary
     tests_path = "./sql_tests/"  # Adjust the path as necessary
     # Instantiate the SQLite connector
-    db_connector = connector_sqlite.SQLiteDB(db_path)
+    db_connector = connector_sqlite.SQLiteDBConnector(db_path)
     # Config for the Slack output
     slack_token = os.getenv('SLACK_TOKEN')
     slack_channel = os.getenv('SLACK_CHANNEL')

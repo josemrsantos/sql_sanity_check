@@ -22,19 +22,22 @@ Finally, this code does have a MIT license, so cloning it to an internal reposit
 classes can be added and the code can be modified to suit your needs.
 
 ## How to run it
-For now, the package comes with a demo script called sq_sanity_check_demo.py. This script will run a few tests on the
+This package comes with a demo script called sq_sanity_check_demo.py. This script will run a few tests on the
 Chinook.db database that is included in the demo directory. The script will run a few tests and output the results to
 stdout. The script can be run with the following command: `python sql_sanity_check_demo.py`.
-Please crease a similar script to run your own tests. This could be as simple as:
+*`Please crease a similar script to run your own tests. To use the sqlite connector, this cou`*ld be as simple as:
+
 ```python
 import sanity_checks
-import connector_sqlite # or any other connector
+import connector_sqlite  # or any other connector
+
 # import custom_output # or use the default output class
 db_path = "./demo/Chinook.db"  # Adjust the path as necessary
 tests_path = "./sql_tests/"  # Adjust the path as necessary
-db_connector = connector_sqlite.SQLiteDB(db_path)
+db_connector = connector_sqlite.SQLiteDBConnector(db_path)
 sanity_checks.SanityCheck(tests_path=tests_path, connector=db_connector)
 ```
+
 
 ## How it works
 
@@ -63,7 +66,7 @@ A default output_object is already included that only outputs to stdout (any log
 
 ### Anatomy of a connector
 
-A connector is an idependent Python module that takes care of the connection to a specific SQL DB engine.
+A connector is an independent Python module that takes care of the connection to a specific SQL DB engine.
 The Class created needs to be a context manager so that it can be used with the with statement. In the Library this class will be called something like:
 
 ```python
@@ -138,6 +141,49 @@ advice would be to keep it as separate as possible and minimise possible network
 A good example of keeping to these rules, has already been given before. Lets say that we have **Track** and 
 **InvoiceLine** on different servers. Using CTEs and fetching a low number of rows/data is a good way to create a SQL 
 test (please see the previous code example).
+
+## Existing connectors
+### SQLite
+The SQLite connector is already included in the library. This connector is very simple and only needs the path to the
+database file. The connector will create a connection to the database and will close it when the context manager is
+exited. The connector will also execute the SQL code and return the result as an iterator.
+A few tests have already been included in the sql_tests/sqlite directory that work with the Chinook.db database that is 
+also included in the demo directory.
+
+### PostgreSQL
+The PostgreSQL connector is also included in the library. This connector is a bit more complex than the SQLite connector
+because it needs the connection parameters to the database. The connector will create a connection to the database and
+will close it when the context manager is exited. The connector will also execute the SQL code and return the result as
+an iterator.
+A few tests have already been included in the sql_tests/postgresql directory that work with the Chinook_PostgreSql.sql 
+dataset that is also included in the demo directory.
+#### How to load the dataset into a PostgreSQL server
+To load the dataset into a locally running PostgreSQL server, you can use the following command:
+```bash
+psql -U postgres -a -f demo/Chinook_PostgreSql.sql
+```
+This command will load the dataset into the database that is running on the default port on the localhost. The user
+postgres is used to connect to the database. The password for the user postgres is not set, so no password is needed.
+The dataset will be loaded into a database called chinook.
+
+#### Testing the PostgreSQL connector
+To test the PostgreSQL connector, you can use the following code:
+```python
+import connector_postgresql
+import sanity_checks
+import custom_output
+db_params = {
+    "host": "localhost",
+    "port": 5432,
+    "database": "chinook",
+    "user": "postgres
+}
+db_connector = connector_postgresql.PostgreSQLConnector(db_params)
+output = custom_output.CustomOutput()
+sanity_checks.SanityCheck(tests_path="./sql_tests/PostgreSQL/", connector=db_connector, output_objects=[output])
+```
+A script called sql_sanity_check_postgresql_demo.py is also included. This script will run the tests in the
+sql_tests/PostgreSQL directory and will output the results to stdout.
 
 ## Usage and contributions
 
