@@ -19,6 +19,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Nothing yet
 
+## [0.2.0] - 2024-08-02
+
+### Added
+
+- New connector class for PostgreSQL databases with the name `PostgreSQLConnector`. Also added unit tests for this class, updated the documentation, a few SQL tests and a Python script that serves as an implementation example.
+
+### Changed
+
+- Changed the name of the connector class for sqlite from `SQLite` to `SQLiteConnector`.
+
+### Fixed
+
+- A typo in the Deployment instructions.
+
 ## [0.1.0] - 2024-07-11
 
 ### Added
